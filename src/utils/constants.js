@@ -1,8 +1,9 @@
 export const PRESET_LOGOS = [
   { name: '无 Logo', url: '' },
-  { name: '微信', url: '/logos/wechat.svg' },
-  { name: '星星', url: '/logos/star.svg' },
-  { name: '爱心', url: '/logos/heart.svg' },
+  { name: '观猹', url: '/logos/观猹.png' },
+  { name: '猹子', url: '/logos/猹子.png' },
+  { name: '吃瓜', url: '/logos/吃瓜.png' },
+  { name: '问号', url: '/logos/问号.png' },
 ]
 
 export const DOT_TYPES = [

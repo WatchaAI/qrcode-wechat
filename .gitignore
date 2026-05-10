@@ -22,8 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*.png
 src/assets/vite.svg
 src/assets/hero.png
 public/favicon.svg
 public/icons.svg
+20260510-141033.png
+社群.png
+testminiapp.jpg
+*.Zone.Identifier

@@ -1,49 +1,62 @@
 <template>
-  <div class="min-h-screen flex flex-col">
-    <header class="border-b border-border px-6 py-4">
-      <h1 class="text-lg font-medium tracking-tight">微信视频号二维码生成器</h1>
+  <div class="min-h-screen flex flex-col bg-surface">
+    <!-- Header -->
+    <header class="border-b border-border px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="/logos/观猹.png" alt="观猹" class="w-7 h-7 rounded" />
+        <div>
+          <h1 class="text-sm font-semibold tracking-tight text-text-primary">QR Studio</h1>
+          <p class="text-[11px] text-text-muted leading-none">微信视频号二维码生成器</p>
+        </div>
+      </div>
+      <a
+        href="https://github.com/WatchaAI/qrcode-wechat"
+        target="_blank"
+        rel="noopener"
+        class="flex items-center gap-1.5 text-xs text-text-muted hover:text-text-primary transition-colors"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
     </header>
 
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden">
       <!-- 左侧：配置面板 -->
-      <div class="lg:w-[420px] lg:border-r lg:border-border overflow-y-auto p-6 space-y-6 order-2 lg:order-1">
+      <div class="lg:w-[400px] xl:w-[440px] lg:border-r lg:border-border overflow-y-auto p-5 space-y-5 order-2 lg:order-1">
         <QrDecoder @decoded="handleDecoded" :content="qrContent" />
-        <template v-if="qrContent">
-          <div class="h-px bg-border"></div>
-          <LogoPicker @change="handleLogoChange" />
-          <div class="h-px bg-border"></div>
-          <ColorPicker
-            v-model:foreground="foreground"
-            v-model:background="background"
-          />
-          <div class="h-px bg-border"></div>
-          <StylePicker
-            v-model:dotType="dotType"
-            v-model:cornerType="cornerType"
-          />
-        </template>
+        <div class="h-px bg-border"></div>
+        <LogoPicker @change="handleLogoChange" />
+        <div class="h-px bg-border"></div>
+        <ColorPicker
+          v-model:foreground="foreground"
+          v-model:background="background"
+        />
+        <div class="h-px bg-border"></div>
+        <StylePicker
+          v-model:dotType="dotType"
+          v-model:cornerType="cornerType"
+        />
       </div>
 
       <!-- 右侧：预览区 -->
       <div class="flex-1 flex items-center justify-center p-6 order-1 lg:order-2 lg:sticky lg:top-0 lg:h-screen">
         <QrPreview
-          v-if="qrContent"
-          ref="previewRef"
-          :content="qrContent"
+          :content="qrContent || demoContent"
           :logo="logo"
           :foreground="foreground"
           :background="background"
           :dotType="dotType"
           :cornerType="cornerType"
+          :isDemo="!qrContent"
         />
-        <div v-else class="text-center text-text-muted">
-          <svg class="w-16 h-16 mx-auto mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
-          </svg>
-          <p class="text-sm">上传或粘贴二维码内容开始</p>
-        </div>
       </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-border px-6 py-3 text-center text-[11px] text-text-muted">
+      Built by <a href="https://github.com/WatchaAI" target="_blank" class="hover:text-text-primary transition-colors">WatchaAI</a>
+      &middot; 纯前端，数据不上传
+    </footer>
   </div>
 </template>
 
@@ -55,13 +68,13 @@ import LogoPicker from './components/LogoPicker.vue'
 import ColorPicker from './components/ColorPicker.vue'
 import StylePicker from './components/StylePicker.vue'
 
+const demoContent = 'https://github.com/WatchaAI/qrcode-wechat'
 const qrContent = ref('')
 const logo = ref('')
 const foreground = ref('#000000')
 const background = ref('#ffffff')
 const dotType = ref('rounded')
 const cornerType = ref('extra-rounded')
-const decoderRef = ref(null)
 
 function handleDecoded(content) {
   qrContent.value = content
