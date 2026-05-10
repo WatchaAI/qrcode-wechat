@@ -58,7 +58,7 @@ import StylePicker from './components/StylePicker.vue'
 const qrContent = ref('')
 const logo = ref('')
 const foreground = ref('#000000')
-const background = ref('transparent')
+const background = ref('#ffffff')
 const dotType = ref('rounded')
 const cornerType = ref('extra-rounded')
 
