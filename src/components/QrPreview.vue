@@ -35,7 +35,7 @@ const props = defineProps({
 })
 
 const qrContainer = ref(null)
-const { generate, setData, setLogo, setDotsColor, setBackgroundColor, setDotsType, setCornersType, download, options } = useQrGenerate()
+const { generate, setData, setLogo, setDotsColor, setBackgroundColor, setDotsType, setCornersType, downloadWithBackground, options } = useQrGenerate()
 
 onMounted(() => {
   options.value = {
@@ -58,22 +58,10 @@ watch(() => props.dotType, (val) => { setDotsType(val); generate(qrContainer.val
 watch(() => props.cornerType, (val) => { setCornersType(val); generate(qrContainer.value) })
 
 function downloadWhite() {
-  setBackgroundColor('#ffffff')
-  generate(qrContainer.value)
-  setTimeout(() => {
-    download('qrcode', 'png')
-    setBackgroundColor(props.background)
-    generate(qrContainer.value)
-  }, 100)
+  downloadWithBackground('qrcode', 'png', '#ffffff')
 }
 
 function downloadTransparent() {
-  setBackgroundColor('transparent')
-  generate(qrContainer.value)
-  setTimeout(() => {
-    download('qrcode-transparent', 'png')
-    setBackgroundColor(props.background)
-    generate(qrContainer.value)
-  }, 100)
+  downloadWithBackground('qrcode-transparent', 'png', 'transparent')
 }
 </script>

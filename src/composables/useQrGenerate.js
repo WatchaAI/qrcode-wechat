@@ -97,6 +97,14 @@ export function useQrGenerate() {
     }
   }
 
+  async function downloadWithBackground(name, extension, bgColor) {
+    const tempQr = new QRCodeStyling({
+      ...options.value,
+      backgroundOptions: { color: bgColor },
+    })
+    await tempQr.download({ name, extension })
+  }
+
   return {
     qrCode,
     options,
@@ -109,5 +117,6 @@ export function useQrGenerate() {
     setDotsType,
     setCornersType,
     download,
+    downloadWithBackground,
   }
 }
