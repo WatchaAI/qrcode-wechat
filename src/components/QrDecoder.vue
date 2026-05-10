@@ -3,13 +3,14 @@
     <h3 class="text-sm font-medium text-text-secondary">二维码内容</h3>
 
     <div
-      v-if="!content"
       class="border border-dashed border-border rounded-lg p-6 text-center transition-colors cursor-pointer hover:border-border-hover"
       :class="{ 'border-text-primary/40 bg-surface-hover': dragging }"
       @dragover.prevent="dragging = true"
       @dragleave="dragging = false"
       @drop.prevent="handleDrop"
       @click="$refs.fileInput.click()"
+      @paste="handlePaste"
+      tabindex="0"
     >
       <input ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleFileChange" />
       <div v-if="loading" class="text-text-secondary">
@@ -20,8 +21,8 @@
         <p class="text-xs">识别中...</p>
       </div>
       <div v-else>
-        <p class="text-sm text-text-secondary">点击上传或拖拽微信截图</p>
-        <p class="text-xs text-text-muted mt-1">自动识别二维码内容</p>
+        <p class="text-sm text-text-secondary">点击上传、拖拽或粘贴图片</p>
+        <p class="text-xs text-text-muted mt-1">支持 Ctrl+V 粘贴截图，上传新图片自动重新解码</p>
       </div>
     </div>
 
@@ -48,13 +49,12 @@
 
     <div v-if="content" class="flex items-center gap-2 bg-surface-card border border-border rounded-lg px-3 py-2">
       <code class="flex-1 text-xs text-text-secondary truncate">{{ content }}</code>
-      <button @click="reset" class="text-xs text-text-muted hover:text-text-primary transition-colors">重置</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useQrDecode } from '../composables/useQrDecode'
 
 const props = defineProps({
@@ -76,22 +76,39 @@ async function handleFile(file) {
 
 function handleDrop(e) {
   dragging.value = false
-  handleFile(e.dataTransfer.files[0])
+  const file = e.dataTransfer.files[0]
+  handleFile(file)
 }
 
 function handleFileChange(e) {
   handleFile(e.target.files[0])
+  e.target.value = ''
 }
+
+function handlePaste(e) {
+  const items = e.clipboardData?.items
+  if (!items) return
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const file = item.getAsFile()
+      if (file) handleFile(file)
+      return
+    }
+  }
+}
+
+function onGlobalPaste(e) {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+  handlePaste(e)
+}
+
+onMounted(() => document.addEventListener('paste', onGlobalPaste))
+onUnmounted(() => document.removeEventListener('paste', onGlobalPaste))
 
 function submitManual() {
   const val = manualInput.value.trim()
   if (!val) return
   setManualContent(val)
   emit('decoded', val)
-}
-
-function reset() {
-  manualInput.value = ''
-  emit('decoded', '')
 }
 </script>

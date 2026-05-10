@@ -61,6 +61,7 @@ const foreground = ref('#000000')
 const background = ref('#ffffff')
 const dotType = ref('rounded')
 const cornerType = ref('extra-rounded')
+const decoderRef = ref(null)
 
 function handleDecoded(content) {
   qrContent.value = content
