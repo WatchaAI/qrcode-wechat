@@ -21,15 +21,10 @@ export function useQrDecode() {
       ctx.drawImage(img, 0, 0)
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-      // Try qr-scanner-wechat first (best for WeChat-style QR codes)
       let text = await tryWechatScanner(canvas)
+      if (!text) text = await tryZxing(imageData)
 
-      // Fallback to zxing-wasm (handles more barcode formats)
-      if (!text) {
-        text = await tryZxing(imageData)
-      }
-
-      // Try with 2x upscale if both failed
+      // 2x upscale
       if (!text) {
         const canvas2 = document.createElement('canvas')
         canvas2.width = img.width * 2
@@ -39,6 +34,22 @@ export function useQrDecode() {
         const imageData2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height)
         text = await tryWechatScanner(canvas2)
         if (!text) text = await tryZxing(imageData2)
+      }
+
+      // Preprocessing: blur + binarize (helps with hand-drawn / artistic QR codes)
+      if (!text) {
+        for (const radius of [2, 3, 4]) {
+          for (const threshold of [100, 128, 160]) {
+            const processed = preprocessImage(img, radius, threshold)
+            text = await tryWechatScanner(processed)
+            if (!text) {
+              const pData = processed.getContext('2d').getImageData(0, 0, processed.width, processed.height)
+              text = await tryZxing(pData)
+            }
+            if (text) break
+          }
+          if (text) break
+        }
       }
 
       if (text) {
@@ -51,6 +62,32 @@ export function useQrDecode() {
     } finally {
       loading.value = false
     }
+  }
+
+  function preprocessImage(img, blurRadius, threshold) {
+    const canvas = document.createElement('canvas')
+    canvas.width = img.width
+    canvas.height = img.height
+    const ctx = canvas.getContext('2d')
+
+    // Apply CSS blur via filter
+    ctx.filter = `blur(${blurRadius}px)`
+    ctx.drawImage(img, 0, 0)
+    ctx.filter = 'none'
+
+    // Binarize
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const data = imageData.data
+    for (let i = 0; i < data.length; i += 4) {
+      const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114
+      const val = gray > threshold ? 255 : 0
+      data[i] = val
+      data[i + 1] = val
+      data[i + 2] = val
+      data[i + 3] = 255
+    }
+    ctx.putImageData(imageData, 0, 0)
+    return canvas
   }
 
   async function tryWechatScanner(canvas) {
