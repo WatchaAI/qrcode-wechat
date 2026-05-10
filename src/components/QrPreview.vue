@@ -7,7 +7,7 @@
     <div class="flex gap-3 w-full">
       <button
         @click="downloadWhite"
-        class="flex-1 px-4 py-2.5 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+        class="flex-1 px-4 py-2.5 bg-text-primary text-surface rounded-lg text-sm font-medium hover:opacity-80 transition-opacity"
       >
         下载 PNG
       </button>

@@ -41,7 +41,7 @@
     <button
       @click="$emit('update:background', background === 'transparent' ? '#000000' : 'transparent')"
       class="text-xs px-3 py-1.5 border border-border rounded-lg hover:border-border-hover transition-colors"
-      :class="background === 'transparent' ? 'border-white text-white' : 'text-text-muted'"
+      :class="background === 'transparent' ? 'border-text-primary text-text-primary' : 'text-text-muted'"
     >
       {{ background === 'transparent' ? '已启用透明背景' : '设为透明背景' }}
     </button>

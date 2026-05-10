@@ -5,18 +5,18 @@ export default {
     extend: {
       colors: {
         surface: {
-          DEFAULT: '#0a0a0a',
-          card: '#141414',
-          hover: '#1a1a1a',
+          DEFAULT: '#fafafa',
+          card: '#ffffff',
+          hover: '#f5f5f5',
         },
         border: {
-          DEFAULT: '#222222',
-          hover: '#333333',
+          DEFAULT: '#e5e5e5',
+          hover: '#d4d4d4',
         },
         text: {
-          primary: '#ffffff',
-          secondary: '#999999',
-          muted: '#666666',
+          primary: '#0a0a0a',
+          secondary: '#525252',
+          muted: '#a3a3a3',
         },
       },
     },

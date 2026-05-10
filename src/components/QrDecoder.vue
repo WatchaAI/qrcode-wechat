@@ -5,7 +5,7 @@
     <div
       v-if="!content"
       class="border border-dashed border-border rounded-lg p-6 text-center transition-colors cursor-pointer hover:border-border-hover"
-      :class="{ 'border-white/40 bg-surface-hover': dragging }"
+      :class="{ 'border-text-primary/40 bg-surface-hover': dragging }"
       @dragover.prevent="dragging = true"
       @dragleave="dragging = false"
       @drop.prevent="handleDrop"

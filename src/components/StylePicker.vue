@@ -10,7 +10,7 @@
           :key="dot.value"
           @click="$emit('update:dotType', dot.value)"
           class="px-2.5 py-1 text-xs rounded-md border transition-colors"
-          :class="dotType === dot.value ? 'border-white text-white' : 'border-border text-text-muted hover:border-border-hover'"
+          :class="dotType === dot.value ? 'border-text-primary text-text-primary' : 'border-border text-text-muted hover:border-border-hover'"
         >
           {{ dot.label }}
         </button>
@@ -25,7 +25,7 @@
           :key="corner.value"
           @click="$emit('update:cornerType', corner.value)"
           class="px-2.5 py-1 text-xs rounded-md border transition-colors"
-          :class="cornerType === corner.value ? 'border-white text-white' : 'border-border text-text-muted hover:border-border-hover'"
+          :class="cornerType === corner.value ? 'border-text-primary text-text-primary' : 'border-border text-text-muted hover:border-border-hover'"
         >
           {{ corner.label }}
         </button>

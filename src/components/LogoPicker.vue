@@ -8,7 +8,7 @@
         :key="logo.name"
         @click="selectLogo(logo.url)"
         class="aspect-square rounded-lg border p-1.5 flex items-center justify-center transition-colors"
-        :class="selected === logo.url ? 'border-white bg-surface-hover' : 'border-border hover:border-border-hover'"
+        :class="selected === logo.url ? 'border-text-primary bg-surface-hover' : 'border-border hover:border-border-hover'"
       >
         <img v-if="logo.url" :src="logo.url" :alt="logo.name" class="w-full h-full object-contain" />
         <span v-else class="text-[10px] text-text-muted">无</span>
@@ -25,7 +25,7 @@
           v-for="logo in customLogos"
           :key="logo.id"
           class="relative group aspect-square rounded-lg border p-1.5 flex items-center justify-center cursor-pointer transition-colors"
-          :class="selected === logo.dataUrl ? 'border-white bg-surface-hover' : 'border-border hover:border-border-hover'"
+          :class="selected === logo.dataUrl ? 'border-text-primary bg-surface-hover' : 'border-border hover:border-border-hover'"
           @click="selectLogo(logo.dataUrl)"
         >
           <img :src="logo.dataUrl" :alt="logo.name" class="w-full h-full object-contain" />
