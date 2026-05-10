@@ -71,6 +71,7 @@
 import { ref } from 'vue'
 import { PRESET_LOGOS } from '../utils/constants'
 import { useLogoStorage } from '../composables/useLogoStorage'
+import { compressImage } from '../utils/compressImage'
 
 const emit = defineEmits(['change'])
 const { customLogos, addLogo, removeLogo: removeFromStorage, clearAll, MAX_LOGOS } = useLogoStorage()
@@ -88,19 +89,22 @@ function handleCustomLogo(e) {
   if (!file) return
   errorMsg.value = ''
 
-  const reader = new FileReader()
-  reader.onload = () => {
-    const dataUrl = reader.result
-    const result = addLogo(file.name, dataUrl)
-    if (result.success) {
-      selected.value = dataUrl
-      emit('change', dataUrl)
-    } else {
-      errorMsg.value = result.error
-    }
-  }
-  reader.readAsDataURL(file)
-  e.target.value = ''
+  compressImage(file)
+    .then((dataUrl) => {
+      const result = addLogo(file.name, dataUrl)
+      if (result.success) {
+        selected.value = dataUrl
+        emit('change', dataUrl)
+      } else {
+        errorMsg.value = result.error
+      }
+    })
+    .catch((err) => {
+      errorMsg.value = err.message
+    })
+    .finally(() => {
+      e.target.value = ''
+    })
 }
 
 function removeLogo(id) {
