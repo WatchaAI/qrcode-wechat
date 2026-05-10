@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <circle cx="32" cy="32" r="28" fill="#FF4757"/>
+  <path d="M32 48s-14-8.5-14-18a9 9 0 0118 0 9 9 0 0118 0c0 9.5-14 18-14 18z" fill="white" transform="translate(-4,-2)"/>
+</svg>
