@@ -21,10 +21,16 @@ export function useQrDecode() {
       ctx.drawImage(img, 0, 0)
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-      let text = await tryWechatScanner(canvas)
+      // 1. Browser native BarcodeDetector (best accuracy on supported browsers)
+      let text = await tryBarcodeDetector(img)
+
+      // 2. WeChat OpenCV scanner
+      if (!text) text = await tryWechatScanner(canvas)
+
+      // 3. ZXing WASM
       if (!text) text = await tryZxing(imageData)
 
-      // 2x upscale
+      // 4. 2x upscale retry
       if (!text) {
         const canvas2 = document.createElement('canvas')
         canvas2.width = img.width * 2
@@ -32,16 +38,18 @@ export function useQrDecode() {
         const ctx2 = canvas2.getContext('2d')
         ctx2.drawImage(img, 0, 0, canvas2.width, canvas2.height)
         const imageData2 = ctx2.getImageData(0, 0, canvas2.width, canvas2.height)
-        text = await tryWechatScanner(canvas2)
+        text = await tryBarcodeDetector(canvas2)
+        if (!text) text = await tryWechatScanner(canvas2)
         if (!text) text = await tryZxing(imageData2)
       }
 
-      // Preprocessing: blur + binarize (helps with hand-drawn / artistic QR codes)
+      // 5. Preprocessing: blur + binarize (hand-drawn / artistic QR codes)
       if (!text) {
         for (const radius of [2, 3, 4]) {
           for (const threshold of [100, 128, 160]) {
             const processed = preprocessImage(img, radius, threshold)
-            text = await tryWechatScanner(processed)
+            text = await tryBarcodeDetector(processed)
+            if (!text) text = await tryWechatScanner(processed)
             if (!text) {
               const pData = processed.getContext('2d').getImageData(0, 0, processed.width, processed.height)
               text = await tryZxing(pData)
@@ -69,13 +77,10 @@ export function useQrDecode() {
     canvas.width = img.width
     canvas.height = img.height
     const ctx = canvas.getContext('2d')
-
-    // Apply CSS blur via filter
     ctx.filter = `blur(${blurRadius}px)`
     ctx.drawImage(img, 0, 0)
     ctx.filter = 'none'
 
-    // Binarize
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const data = imageData.data
     for (let i = 0; i < data.length; i += 4) {
@@ -88,6 +93,17 @@ export function useQrDecode() {
     }
     ctx.putImageData(imageData, 0, 0)
     return canvas
+  }
+
+  async function tryBarcodeDetector(source) {
+    try {
+      if (!('BarcodeDetector' in window)) return null
+      const detector = new BarcodeDetector({ formats: ['qr_code'] })
+      const results = await detector.detect(source)
+      return results.length > 0 ? results[0].rawValue : null
+    } catch {
+      return null
+    }
   }
 
   async function tryWechatScanner(canvas) {
