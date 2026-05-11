@@ -3,7 +3,7 @@
     <!-- Header -->
     <header class="border-b border-border px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="/watcha-logo.svg" alt="Watcha" class="h-6" />
+        <img :src="`${base}watcha-logo.svg`" alt="Watcha" class="h-6" />
         <span class="text-xs text-text-muted">/ QR Studio</span>
       </div>
       <a
@@ -77,6 +77,7 @@ import LogoPicker from './components/LogoPicker.vue'
 import ColorPicker from './components/ColorPicker.vue'
 import StylePicker from './components/StylePicker.vue'
 
+const base = import.meta.env.BASE_URL
 const demoContent = 'https://github.com/WatchaAI/qrcode-wechat'
 const qrContent = ref('')
 const logo = ref('')

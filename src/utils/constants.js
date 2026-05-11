@@ -1,9 +1,11 @@
+const BASE = import.meta.env.BASE_URL
+
 export const PRESET_LOGOS = [
   { name: '无 Logo', url: '' },
-  { name: '观猹', url: '/logos/观猹.png' },
-  { name: '猹子', url: '/logos/猹子.png' },
-  { name: '吃瓜', url: '/logos/吃瓜.png' },
-  { name: '问号', url: '/logos/问号.png' },
+  { name: '观猹', url: `${BASE}logos/观猹.png` },
+  { name: '猹子', url: `${BASE}logos/猹子.png` },
+  { name: '吃瓜', url: `${BASE}logos/吃瓜.png` },
+  { name: '问号', url: `${BASE}logos/问号.png` },
 ]
 
 export const DOT_TYPES = [
