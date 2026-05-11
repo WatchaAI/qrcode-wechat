@@ -3,11 +3,8 @@
     <!-- Header -->
     <header class="border-b border-border px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <img src="/logos/观猹.png" alt="观猹" class="w-7 h-7 rounded" />
-        <div>
-          <h1 class="text-sm font-semibold tracking-tight text-text-primary">QR Studio</h1>
-          <p class="text-[11px] text-text-muted leading-none">微信视频号二维码生成器</p>
-        </div>
+        <img src="/watcha-logo.svg" alt="Watcha" class="h-6" />
+        <span class="text-xs text-text-muted">/ QR Studio</span>
       </div>
       <a
         href="https://github.com/WatchaAI/qrcode-wechat"
