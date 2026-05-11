@@ -23,6 +23,17 @@
         <QrDecoder @decoded="handleDecoded" :content="qrContent" />
         <div class="h-px bg-border"></div>
         <LogoPicker @change="handleLogoChange" />
+        <div v-if="logo" class="flex items-center gap-3">
+          <label class="text-xs text-text-muted whitespace-nowrap">Logo 留白</label>
+          <input
+            type="range"
+            min="0"
+            max="20"
+            v-model.number="logoMargin"
+            class="flex-1 h-1 accent-text-primary"
+          />
+          <span class="text-xs text-text-muted w-6 text-right">{{ logoMargin }}</span>
+        </div>
         <div class="h-px bg-border"></div>
         <ColorPicker
           v-model:foreground="foreground"
@@ -44,6 +55,7 @@
           :background="background"
           :dotType="dotType"
           :cornerType="cornerType"
+          :logoMargin="logoMargin"
           :isDemo="!qrContent"
         />
       </div>
@@ -70,6 +82,7 @@ const qrContent = ref('')
 const logo = ref('')
 const foreground = ref('#000000')
 const background = ref('#ffffff')
+const logoMargin = ref(0)
 const dotType = ref('rounded')
 const cornerType = ref('extra-rounded')
 

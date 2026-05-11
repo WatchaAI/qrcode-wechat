@@ -61,11 +61,12 @@ const props = defineProps({
   background: { type: String, default: '#ffffff' },
   dotType: { type: String, default: 'rounded' },
   cornerType: { type: String, default: 'extra-rounded' },
+  logoMargin: { type: Number, default: 0 },
   isDemo: { type: Boolean, default: false },
 })
 
 const qrContainer = ref(null)
-const { generate, setData, setLogo, setDotsColor, setBackgroundColor, setDotsType, setCornersType, downloadWithBackground, options } = useQrGenerate()
+const { generate, setData, setLogo, setDotsColor, setBackgroundColor, setDotsType, setCornersType, setLogoMargin, downloadWithBackground, options } = useQrGenerate()
 
 onMounted(() => {
   options.value = {
@@ -86,6 +87,7 @@ watch(() => props.foreground, (val) => { setDotsColor(val); generate(qrContainer
 watch(() => props.background, (val) => { setBackgroundColor(val); generate(qrContainer.value) })
 watch(() => props.dotType, (val) => { setDotsType(val); generate(qrContainer.value) })
 watch(() => props.cornerType, (val) => { setCornersType(val); generate(qrContainer.value) })
+watch(() => props.logoMargin, (val) => { setLogoMargin(val); generate(qrContainer.value) })
 
 function downloadWhite() {
   downloadWithBackground('qrcode', 'png', '#ffffff')

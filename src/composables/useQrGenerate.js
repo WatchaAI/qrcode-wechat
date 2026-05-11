@@ -27,7 +27,7 @@ export function useQrGenerate() {
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 5,
+      margin: 0,
       imageSize: 0.35,
     },
     qrOptions: {
@@ -91,6 +91,13 @@ export function useQrGenerate() {
     }
   }
 
+  function setLogoMargin(margin) {
+    options.value = {
+      ...options.value,
+      imageOptions: { ...options.value.imageOptions, margin },
+    }
+  }
+
   async function download(name = 'qrcode', extension = 'png') {
     if (qrCode.value) {
       await qrCode.value.download({ name, extension })
@@ -116,6 +123,7 @@ export function useQrGenerate() {
     setBackgroundColor,
     setDotsType,
     setCornersType,
+    setLogoMargin,
     download,
     downloadWithBackground,
   }
